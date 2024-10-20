@@ -87,13 +87,15 @@ async function start() {
   console.time('parsing time');
   console.log('Reading files: ', files);
 
-  const writable = process.stdout;
-
   // 1. Create the write stream for pagesFilename
-  // TODO
   // 2. write the header to the file "id, title"
+  // TODO
   // 3. Iterate over each file and call parseAsync in *series*
   // 3. End the writable stream and then wait on `finished(writeable)`
+  const writable = fs.createWriteStream(pagesFilename);
+
+  writable.write("id,title\n");
+
   for (const file of files) {
     parseAsync(file, writable);
   }
