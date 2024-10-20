@@ -90,14 +90,17 @@ async function start() {
 
   writable.write("id,title\n");
 
-  for (const file of files) {
-    await parseAsync(file, writable);
-  }
+  // for (const file of files) {
+  //   await parseAsync(file, writable);
+  // }
 
-  // TODO: Extra - parallelise
+  // Extra - parallelise
   // 1. Map over each file and call parseAsync
   // 2. Promise.all that array of promises
   // 3. Use `p-limit` to limit the concurrency
+  const limit = pLimit(2);
+  const limitedPromises = files.map(file => limit(() => parseAsync(file, writable)));
+  await Promise.all(limitedPromises);
 
   writable.end();
 
