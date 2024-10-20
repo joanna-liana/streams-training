@@ -60,8 +60,11 @@ Node.js v20.9.0
 ```
 2) Were you able to track memory?
 
-Nope
+Yes
 
-3) Why `climem` is not displaying any data?
+3) Why is `climem` not displaying any data?
+
+Because you need to run it through a separate command, `npm run climem`. Example: `npm run one & npm run climem`.
+
 4) how much memory is being held by your process while it is parsing?
 5) how much time does it take for `npm run two` to complete?
