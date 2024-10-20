@@ -1,0 +1,21 @@
+{
+  "name": "stressor-slow",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "one": "CLIMEM=8999 node -r climem stressor ../wikipedia/enwiki-20151201-pages-meta-current1.xml-p000000010p000010000.br",
+    "two": "CLIMEM=8999 node -r climem stressor ../wikipedia/enwiki-20151201-pages-meta-current1.xml-p000000010p000010000.br ../wikipedia/enwiki-20151201-pages-meta-current1.xml-p000000010p000010000.br",
+    "all": "CLIMEM=8999 node -r climem stressor ../wikipedia/*br",
+    "climem": "climem 8999",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "xml2js": "^0.4.16"
+  },
+  "devDependencies": {
+    "climem": "^2.0.0"
+  }
+}
