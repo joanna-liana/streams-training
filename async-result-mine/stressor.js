@@ -14,7 +14,6 @@ const files = process.argv.splice(2);
 const pagesFilename = path.resolve(__dirname, 'pages.csv');
 
 
-// TODO
 // promisify stream.finished
 let total = 0;
 
