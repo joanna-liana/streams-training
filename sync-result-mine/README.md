@@ -66,5 +66,10 @@ Yes
 
 Because you need to run it through a separate command, `npm run climem`. Example: `npm run one & npm run climem`.
 
-4) how much memory is being held by your process while it is parsing?
-5) how much time does it take for `npm run two` to complete?
+4) How much memory is being held by your process while it is parsing?
+
+About 1300 MB (roughly the same as for `npm run one`).
+
+5) How much time does it take for `npm run two` to complete?
+
+About 10 seconds (twice as much as for `npm run one`).
