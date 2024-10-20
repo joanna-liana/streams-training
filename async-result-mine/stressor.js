@@ -3,6 +3,7 @@
 const fs = require('fs');
 const util = require('util');
 const stream = require('stream');
+const { pipeline, finished } = require('node:stream/promises');
 const path = require('path');
 const { once } = require('events');
 const saxophonist = require('saxophonist');
@@ -12,7 +13,6 @@ const pLimit = require('p-limit');
 const files = process.argv.splice(2);
 const pagesFilename = path.resolve(__dirname, 'pages.csv');
 
-const pipeline = util.promisify(stream.pipeline);
 
 // TODO
 // promisify stream.finished
@@ -26,9 +26,7 @@ const chunkToRow = (chunk) => {
 
 async function parseAsync(file, writable) {
   console.time(file);
-  fs.readFileSync(file);
 
-  console.log("FILE READ");
   const readable = fs.createReadStream(file);
   const brotli = createBrotliDecompress();
   const parseStream = saxophonist('page', {
@@ -60,18 +58,15 @@ async function parseAsync(file, writable) {
 
   // 1. create a pipeline from readable -> brotli -> parseStream -> transform -> writable
   // 2. do not end the writable stream, so that it can be reused for the next parsed file
-  stream.pipeline(
+  await pipeline(
     readable,
     // debugLogStream,
     brotli,
     parseStream,
     transformStream,
     writable,
-    (err) => {
-      if (err) {
-        console.error("Pipeline error", err);
-      }
-    }
+    { end: false },
+    // TODO: how to add error handler along with { end: false }?
   );
 
   // TODO: Extra
@@ -97,13 +92,17 @@ async function start() {
   writable.write("id,title\n");
 
   for (const file of files) {
-    parseAsync(file, writable);
+    await parseAsync(file, writable);
   }
 
   // TODO: Extra - parallelise
   // 1. Map over each file and call parseAsync
   // 2. Promise.all that array of promises
   // 3. Use `p-limit` to limit the concurrency
+
+  writable.end();
+
+  await finished(writable);
 
   console.log('total: ', total);
   console.timeEnd('parsing time');
