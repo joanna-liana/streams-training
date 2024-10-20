@@ -40,12 +40,12 @@ function parse() {
         return console.error('Decompression error:', err);
       }
 
-      parseString(decompressedData.toString(), (err) => {
+      parseString(decompressedData.toString(), (err, parsedXml) => {
         if (err) {
           throw err;
         }
 
-        total += 1;
+        total += parsedXml.mediawiki.page.length;
 
         parse();
       });
